@@ -72,7 +72,7 @@ public class LedSquareManger : Singleton<LedSquareManger>
         Vector2 startPos = _videoCanvas.anchoredPosition;
         _videoCanvas.anchoredPosition = Vector2.zero;
 
-        RenderTexture rt = new RenderTexture(resWidth, resHeight, 24);
+        var rt = new RenderTexture(resWidth, resHeight, 24);
         rt.antiAliasing = AntiAliasing;
         _captureCamera.targetTexture = rt;
 

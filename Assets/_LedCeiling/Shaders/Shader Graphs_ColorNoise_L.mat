@@ -18,7 +18,8 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2000
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -41,11 +42,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaClip: 0.5
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _Control1: 0.12426886
+    - _ColorMask: 15
+    - _Control1: 0.18863954
     - _Control2: 1
-    - _Control3: 1
+    - _Control3: 0.06798929
     - _Fade: 1
     - _Float: 0
     - _Frequency: 0.01
@@ -53,11 +56,20 @@ Material:
     - _QueueControl: 1
     - _QueueOffset: 0
     - _Scale: 1
-    - _Speed: 1.9178932
+    - _Speed: 0.91739357
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UIMaskSoftnessX: 1
+    - _UIMaskSoftnessY: 1
     m_Colors:
-    - _Color: {r: 0, g: 0.45403862, b: 1, a: 1}
+    - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 1, g: 0, b: 0, a: 1}
     - _Tint: {r: 0.65621495, g: 1, b: 0, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &3798211923658319300
 MonoBehaviour:
   m_ObjectHideFlags: 11
@@ -83,4 +95,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 7
+  version: 9

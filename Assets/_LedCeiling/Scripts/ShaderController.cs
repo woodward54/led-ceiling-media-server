@@ -25,7 +25,7 @@ public class ShaderController : MonoBehaviour
         _mat = GetComponent<Image>().material;
 
         // Find the other channel material
-        var imgs = GameObject.FindObjectsOfType<Image>(true).Where(o => o.name == name).ToList();
+        var imgs = FindObjectsOfType<Image>(true).Where(o => o.name == name).ToList();
 
         var c = imgs.Where(o => o.gameObject.GetInstanceID() != gameObject.GetInstanceID()).First();
         _complimentaryMat = c.material;
@@ -36,12 +36,11 @@ public class ShaderController : MonoBehaviour
     void Start()
     {
         _colorPicker.color = Color.white;
+        SetFaderUiValues();
     }
 
     void OnEnable()
     {
-        SetFaderUiValues();
-
         _colorPicker.onColorChanged += OnColorChanged;
         _speedSlider.onValueChanged.AddListener(OnSpeedChanged);
         _control1.onValueChanged.AddListener(OnControl1Changed);
