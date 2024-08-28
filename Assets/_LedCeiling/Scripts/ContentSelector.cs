@@ -16,7 +16,7 @@ public class ContentSelector : Singleton<ContentSelector>
     [SerializeField] ContentSquare _contentSquarePrefab;
     [SerializeField] GameObject _contentContainer;
 
-    [SerializeField] float _crossFadeTime = 0.4f;
+    [SerializeField] float _crossFadeTime = 0.6f;
     [SerializeField] CanvasGroup _lCanvas;
     [SerializeField] CanvasGroup _rCanvas;
 
@@ -43,11 +43,13 @@ public class ContentSelector : Singleton<ContentSelector>
         }
 
         isLeftActive = false;
-        SelectContent("FullColor Shader");
+        SelectContent("FullColor Shader", 1f);
     }
 
     async public void SelectContent(VideoClip videoClip)
     {
+        if (_isTransitioning) return;
+
         _isTransitioning = true;
 
         // If L is active, we're about to transition to R
@@ -59,14 +61,14 @@ public class ContentSelector : Singleton<ContentSelector>
         SelectContent("Video");
     }
 
-    public void SelectContent(string contentName)
+    public void SelectContent(string contentName, float delay = 0f)
     {
         _isTransitioning = true;
 
-        CrossFade(contentName);
+        CrossFade(contentName, delay);
     }
 
-    async void CrossFade(string contentName)
+    async void CrossFade(string contentName, float delay = 0f)
     {
         isLeftActive = !isLeftActive;
 
@@ -79,16 +81,20 @@ public class ContentSelector : Singleton<ContentSelector>
 
         if (isLeftActive)
         {
-            _lCanvas.DOFade(1f, _crossFadeTime);
             _rCanvas.DOFade(0f, _crossFadeTime);
+
+            _lCanvas.alpha = 0f;
+            _lCanvas.DOFade(1f, _crossFadeTime).SetDelay(delay);
         }
         else
         {
             _lCanvas.DOFade(0f, _crossFadeTime);
-            _rCanvas.DOFade(1f, _crossFadeTime);
+
+            _rCanvas.alpha = 0;
+            _rCanvas.DOFade(1f, _crossFadeTime).SetDelay(delay);
         }
 
-        await Task.Delay((int)(_crossFadeTime * 1000));
+        await Task.Delay((int)(_crossFadeTime * 1300));
 
         DeactivateEntireCanvasContent(nonActiveCanvas);
 

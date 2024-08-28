@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -31,6 +32,8 @@ public class ContentSquareDataShader : ContentSquareData
 [RequireComponent(typeof(Image), typeof(Button))]
 public class ContentSquare : MonoBehaviour
 {
+    [SerializeField] TMP_Text _duration;
+
     Image _previewImg;
     Button _button;
     VideoClip _myClip;
@@ -39,6 +42,8 @@ public class ContentSquare : MonoBehaviour
     {
         _previewImg = GetComponent<Image>();
         _button = GetComponent<Button>();
+
+        if (_duration != null) _duration.text = "";
     }
 
     public void Setup(VideoClip video)
@@ -48,6 +53,13 @@ public class ContentSquare : MonoBehaviour
         ThumbnailCreator.GetThumbnailFromVideo(video, SetThumbnail);
 
         _button.onClick.AddListener(delegate { OnClick(); });
+
+        if (_duration != null)
+        {
+            TimeSpan time = TimeSpan.FromSeconds(video.length);
+
+            _duration.text = time.ToString(@"hh\:mm\:ss");
+        }
     }
 
     void SetThumbnail(Sprite thumbnail)

@@ -61,8 +61,8 @@ Material:
     - _Fade: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _SmthStep: 0.25903934
-    - _Speed: 0.9941734
+    - _SmthStep: 0.086289875
+    - _Speed: 1.2245084
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
