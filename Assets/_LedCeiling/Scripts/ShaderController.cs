@@ -11,9 +11,7 @@ public class ShaderController : MonoBehaviour
 {
     [SerializeField] ColorPicker _colorPicker;
     [SerializeField] Slider _speedSlider;
-    [SerializeField] Slider _control1;
-    [SerializeField] Slider _control2;
-    [SerializeField] Slider _control3;
+    [SerializeField] Slider _SmthStep;
 
     Material _mat;
     Material _complimentaryMat;
@@ -43,27 +41,21 @@ public class ShaderController : MonoBehaviour
     {
         _colorPicker.onColorChanged += OnColorChanged;
         _speedSlider.onValueChanged.AddListener(OnSpeedChanged);
-        _control1.onValueChanged.AddListener(OnControl1Changed);
-        _control2.onValueChanged.AddListener(OnControl2Changed);
-        _control3.onValueChanged.AddListener(OnControl3Changed);
+        _SmthStep.onValueChanged.AddListener(OnSmthStepChanged);
     }
 
     void OnDisable()
     {
         _colorPicker.onColorChanged -= OnColorChanged;
         _speedSlider.onValueChanged.RemoveListener(OnSpeedChanged);
-        _control1.onValueChanged.RemoveListener(OnControl1Changed);
-        _control2.onValueChanged.RemoveListener(OnControl2Changed);
-        _control3.onValueChanged.RemoveListener(OnControl3Changed);
+        _SmthStep.onValueChanged.RemoveListener(OnSmthStepChanged);
     }
 
     void SetFaderUiValues()
     {
         _colorPicker.gameObject.SetActive(_mat.HasColor("_Color"));
         _speedSlider.gameObject.SetActive(_mat.HasFloat("_Speed"));
-        _control1.gameObject.SetActive(_mat.HasFloat("_Control1"));
-        _control2.gameObject.SetActive(_mat.HasFloat("_Control2"));
-        _control3.gameObject.SetActive(_mat.HasFloat("_Control3"));
+        _SmthStep.gameObject.SetActive(_mat.HasFloat("_SmthStep"));
 
         if (_mat.HasFloat("_Color"))
             _colorPicker.color = _mat.GetColor("_Color");
@@ -71,14 +63,8 @@ public class ShaderController : MonoBehaviour
         if (_mat.HasFloat("_Speed"))
             _speedSlider.value = _mat.GetFloat("_Speed");
 
-        if (_mat.HasFloat("_Control1"))
-            _control1.value = _mat.GetFloat("_Control1");
-
-        if (_mat.HasFloat("_Control2"))
-            _control2.value = _mat.GetFloat("_Control2");
-
-        if (_mat.HasFloat("_Control3"))
-            _control3.value = _mat.GetFloat("_Control3");
+        if (_mat.HasFloat("_SmthStep"))
+            _SmthStep.value = _mat.GetFloat("_SmthStep");
 
         if (_videoPlayer)
             _videoPlayer.playbackSpeed = _mat.GetFloat("_Speed");
@@ -105,30 +91,12 @@ public class ShaderController : MonoBehaviour
             _videoPlayer.playbackSpeed = value;
     }
 
-    void OnControl1Changed(float value)
+    void OnSmthStepChanged(float value)
     {
         if (ContentSelector.Instance.IsTransitioning)
             return;
 
-        _mat.SetFloat("_Control1", value);
-        _complimentaryMat.SetFloat("_Control1", value);
-    }
-
-    void OnControl2Changed(float value)
-    {
-        if (ContentSelector.Instance.IsTransitioning)
-            return;
-
-        _mat.SetFloat("_Control2", value);
-        _complimentaryMat.SetFloat("_Control2", value);
-    }
-
-    void OnControl3Changed(float value)
-    {
-        if (ContentSelector.Instance.IsTransitioning)
-            return;
-            
-        _mat.SetFloat("_Control3", value);
-        _complimentaryMat.SetFloat("_Control3", value);
+        _mat.SetFloat("_SmthStep", value);
+        _complimentaryMat.SetFloat("_SmthStep", value);
     }
 }

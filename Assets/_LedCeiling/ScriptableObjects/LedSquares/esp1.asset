@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a37850576554d0d9916119de9c737f, type: 3}
   m_Name: esp1
   m_EditorClassIdentifier: 
-  Hostname: esp1
+  Hostname: esp1.
   Position: {x: 0, y: 0}
   Enabled: 1
   Row: 1

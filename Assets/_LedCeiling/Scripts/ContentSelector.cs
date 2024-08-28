@@ -74,7 +74,7 @@ public class ContentSelector : Singleton<ContentSelector>
         var nonActiveCanvas = !isLeftActive ? _lCanvas : _rCanvas;
 
         var go = Utils.FindChildByName(activeCanvas.gameObject, contentName);
-
+        
         go.SetActive(true);
 
         if (isLeftActive)
