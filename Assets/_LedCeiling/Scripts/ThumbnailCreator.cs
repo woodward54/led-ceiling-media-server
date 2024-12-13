@@ -117,10 +117,53 @@ public static class ThumbnailCreator
     {
         videoPlayer.sendFrameReadyEvents = true;
         videoPlayer.frameReady += ThumbnailReady;
-        videoPlayer.frame = frameToCapture;
+        videoPlayer.errorReceived += VideoPlayerError;
+        videoPlayer.prepareCompleted += (source) => VideoPlayerPrepared(source, frameToCapture);
+
+        videoPlayer.Prepare();
+
         // TODO This is bugged in Unity, check in the future if we can remove play and still recieve the frame with just .frame and Pause()
-        videoPlayer.Play();
-        videoPlayer.Pause();
+        // videoPlayer.Play();
+        // videoPlayer.Pause();
+    }
+
+    private static void VideoPlayerPrepared(VideoPlayer source, int frameToCapture)
+    {
+        //Debug.Log($"Video prepared successfully. Duration: {source.length}s, Frame count: {source.frameCount}");
+
+        // Validate frame to capture
+        if (source.frameCount <= 0)
+        {
+            Debug.LogError("Video has no frames available");
+            CleanupAndProcessNext();
+            return;
+        }
+
+        // Ensure frameToCapture is within valid range
+        int targetFrame = (int)Mathf.Clamp(frameToCapture, 0, source.frameCount - 1);
+        source.frame = targetFrame;
+        source.Play();
+        source.Pause();
+    }
+
+    private static void VideoPlayerError(VideoPlayer source, string message)
+    {
+        Debug.LogError($"Video player error: {message}");
+        CleanupAndProcessNext();
+    }
+
+    private static void CleanupAndProcessNext()
+    {
+        videoPlayer.sendFrameReadyEvents = false;
+        videoPlayer.frameReady -= ThumbnailReady;
+        videoPlayer.errorReceived -= VideoPlayerError;
+        videoPlayer.prepareCompleted -= (source) => VideoPlayerPrepared(source, 0);
+
+        processInProgress = false;
+        if (thumbnailQueue.Count > 0)
+        {
+            GetThumbnailFromVideo(thumbnailQueue.Dequeue());
+        }
     }
 
     private static void ThumbnailReady(VideoPlayer source, long frameIdx)

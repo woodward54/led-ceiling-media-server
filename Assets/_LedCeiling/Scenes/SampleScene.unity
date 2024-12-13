@@ -7313,7 +7313,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 90cdf12fcde984ba9b6d9933b6091960, type: 2}
   - {fileID: 11400000, guid: 470712e884c4e4a4eb92b8b5486e5a27, type: 2}
   - {fileID: 11400000, guid: cf2c747d8e57f4b75b603b0db59aae31, type: 2}
-  _framesPerSecond: 15
+  _framesPerSecond: 20
   AntiAliasing: 1
   _squareControllerPrefab: {fileID: -5163232570889162526, guid: 76eeea27517df480ebd595e01bfa51ef, type: 3}
   _captureCamera: {fileID: 1597801246}

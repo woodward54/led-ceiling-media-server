@@ -21,7 +21,7 @@ public class LedFrameProcessor
         // _frameTimeOffset = _config.FramesPerBuffer * _config.PercentBufferUse / framesPerSecond;
         // _frameTimeOffset = 2.0; // 24fps * 2 = 48 buffers
 
-        _frameTimeOffset = 2.5; // 15 * 3 = 45 buffers
+        _frameTimeOffset = 2.0; // 15 * 3 = 45 buffers
     }
 
     public byte[] ProcessFrame(in Color32[] sourcePixels, Vector2Int offsetPosition, float brightness)

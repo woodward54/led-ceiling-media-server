@@ -50,7 +50,7 @@ public class ContentSquare : MonoBehaviour
     {
         _myClip = video;
 
-        ThumbnailCreator.GetThumbnailFromVideo(video, SetThumbnail);
+        ThumbnailCreator.GetThumbnailFromVideo(video, SetThumbnail, 20);
 
         _button.onClick.AddListener(delegate { OnClick(); });
 
