@@ -23,7 +23,7 @@ public class DevicesUIMenuManager : Singleton<DevicesUIMenuManager>
     {
         var devices = row.GetComponentsInChildren<UIDevice>();
 
-        devices.OrderBy(d => d.OffsetPosition.x);
+        devices.OrderBy(d => d.SquareData.Row);
 
         for (int i = 0; i < devices.Length; i++)
         {

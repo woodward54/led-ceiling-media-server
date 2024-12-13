@@ -3,28 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using static LedSquareChannel;
 
 public class UIDevice : MonoBehaviour
 {
-    public enum ConnectedStatus
-    {
-        Connected,
-        Disconnected
-    }
-
     [SerializeField] TMP_Text _hostname;
     [SerializeField] TMP_Text _ip;
     [SerializeField] TMP_Text _connectedStatus;
     [SerializeField] Image _connectedImg;
 
-    public Vector2Int OffsetPosition;
-
     public LedSquare SquareData;
-    public string Hostname = "";
-    public string Ip = "";
-    public ConnectedStatus Status = ConnectedStatus.Disconnected;
 
-    public void Setup(LedSquare squareData, string hostname, ConnectedStatus status)
+    private ConnectionState _status;
+    public ConnectionState Status
+    {
+        get => _status;
+        set
+        {
+            _status = value;
+            UpdateStatusDisplay();
+        }
+    }
+
+    public string Ip
+    {
+        set => _ip.text = value;
+    }
+
+    public string Hostname
+    {
+        set => _hostname.text = value;
+    }
+
+    public void Setup(LedSquare squareData, string hostname, ConnectionState status)
     {
         SquareData = squareData;
         Hostname = hostname;
@@ -33,25 +44,17 @@ public class UIDevice : MonoBehaviour
         DevicesUIMenuManager.Instance.RegisterDeviceUi(this);
     }
 
-    void Update()
+    private void UpdateStatusDisplay()
     {
-        _hostname.text = Hostname;
-        _ip.text = Ip;
-        _connectedStatus.text = Status.ToString();
-
-        switch (Status)
+        var color = Status switch
         {
-            case ConnectedStatus.Connected:
-                _connectedImg.color = Color.green;
-                break;
+            ConnectionState.Connected => Color.green,
+            ConnectionState.Connecting => Color.yellow,
+            ConnectionState.Reconnecting => Color.yellow,
+            _ => Color.red
+        };
 
-            case ConnectedStatus.Disconnected:
-                _connectedImg.color = Color.red;
-                break;
-
-            default:
-                _connectedImg.color = Color.black;
-                break;
-        }
+        _connectedStatus.text = Status.ToString();
+        _connectedImg.color = color;
     }
 }

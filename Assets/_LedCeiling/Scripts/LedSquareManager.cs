@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Concurrent;
-using System.Net;
-using System.Net.Sockets;
-using System.Linq;
-using System.Threading;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.VisualScripting;
 using System.IO;
+using System;
 
 public class LedSquareManger : Singleton<LedSquareManger>
 {
@@ -15,18 +9,18 @@ public class LedSquareManger : Singleton<LedSquareManger>
     [SerializeField] List<LedSquare> _squares;
     [SerializeField] uint _framesPerSecond = 24;
     [SerializeField] int AntiAliasing = 8;
-    [SerializeField] LedSquareController _squareControllerPrefab;
+    [SerializeField] LedSquareChannel _squareControllerPrefab;
     [SerializeField] Camera _captureCamera;
     [SerializeField] RectTransform _videoCanvas;
 
     public Vector2 _capturePos;
 
     public Texture2D ScreenShot { get { return _screenShot; } }
-    public Color32[] Pixels32 { get { return _pixels; } }
+    public static Color32[] Pixels32 { get; private set; }
+    public static DateTime FrameTimestamp { get; private set; }
 
     Texture2D _screenShot;
-    Color32[] _pixels;
-    List<LedSquareController> _squareControllers;
+    List<LedSquareChannel> _squareControllers;
 
     int resWidth = 620;
     int resHeight = 496;
@@ -44,10 +38,8 @@ public class LedSquareManger : Singleton<LedSquareManger>
             var newSquare = Instantiate(_squareControllerPrefab, Vector3.zero, Quaternion.identity, transform);
 
             newSquare.name = s.Hostname;
-            newSquare.HostName = s.Hostname + _hostnameDomain;
-            newSquare.FramesPerSecond = _framesPerSecond;
-            newSquare.OffsetPosition = s.Position;
-            newSquare.SquareData = s;
+
+            newSquare.Setup(s.Hostname + _hostnameDomain, _framesPerSecond, s.Position, s);
 
             _squareControllers.Add(newSquare);
         }
@@ -61,7 +53,9 @@ public class LedSquareManger : Singleton<LedSquareManger>
 
         if (_takeScreenshot)
         {
-            File.WriteAllBytes(Path.Combine(Application.persistentDataPath + "Img1.png"), _screenShot.EncodeToPNG());
+            var path = Path.Combine(Application.persistentDataPath, "Img1.png");
+            Debug.Log("Saving screenshot to " + path);
+            File.WriteAllBytes(path, _screenShot.EncodeToPNG());
             _takeScreenshot = false;
         }
     }
@@ -88,7 +82,8 @@ public class LedSquareManger : Singleton<LedSquareManger>
         Destroy(rt);
 
         int sourceMipLevel = 0;
-        _pixels = _screenShot.GetPixels32(sourceMipLevel);
+        Pixels32 = _screenShot.GetPixels32(sourceMipLevel);
+        FrameTimestamp = DateTime.UtcNow;
 
         _videoCanvas.anchoredPosition = startPos;
     }

@@ -10,12 +10,13 @@ public class SettingsManager : Singleton<SettingsManager>
     [SerializeField] TMP_Text _showDebugSquares;
     [SerializeField] GameObject _debugSquares;
 
-    public float Brightness { get { return _brightnessSlider.value; } }
+    public static float Brightness { get; private set; }
 
     void Start()
     {
         _brightnessSlider.onValueChanged.AddListener(delegate { BrightnessValueChanged(); });
         _brightnessSlider.value = PlayerPrefs.GetFloat("BrightnessSlider");
+        Brightness = _brightnessSlider.value;
 
         _showDebugSquares.text = "Off";
         _debugSquares.SetActive(false);
@@ -23,6 +24,7 @@ public class SettingsManager : Singleton<SettingsManager>
 
     public void BrightnessValueChanged()
     {
+        Brightness = _brightnessSlider.value;
         PlayerPrefs.SetFloat("BrightnessSlider", _brightnessSlider.value);
     }
 
@@ -38,6 +40,5 @@ public class SettingsManager : Singleton<SettingsManager>
             _debugSquares.SetActive(true);
             _showDebugSquares.text = "On";
         }
-
     }
 }
